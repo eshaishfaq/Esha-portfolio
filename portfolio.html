@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio | Esha Ishfaq</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navbar -->
+<nav>
+  <div class="logo">ESHA ISHFAQ</div>
+  <div class="menu-toggle" id="menu-toggle">&#9776;</div> <!-- Hamburger Icon -->
+  <ul id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="experience.html">Experience</a></li>
+    <li><a href="achievements.html">Achievements</a></li>
+    <li><a href="education.html">Education</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+
+
+  <!-- Intro Section -->
+  <section class="page-section">
+    <h2>My Portfolio</h2>
+    <p>Welcome to my portfolio! Here you will find an overview of my professional skills, personal interests, and career goals.</p>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="page-section">
+    <h2>My Skills</h2>
+    <p>These are the core skills I have developed through my education and training.</p>
+
+    <div class="certificates-grid">
+      <div class="certificate-card">
+        <h3>Front-End Development</h3>
+        <p>HTML, CSS, Java</p>
+      </div>
+      <div class="certificate-card">
+        <h3>Digital Marketing</h3>
+        <p>Lead Generation, SEO, Social Media Strategy</p>
+      </div>
+      <div class="certificate-card">
+        <h3>Professional Skills</h3>
+        <p>Time Management, Adaptability, Teaching</p>
+      </div>
+      <div class="certificate-card">
+        <h3>Soft Skills</h3>
+        <p>Communication, Teamwork, Problem Solving</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interests Section -->
+  <section class="page-section">
+    <h2>My Interests</h2>
+    <p>Here are some areas I am passionate about and enjoy exploring.</p>
+
+    <div class="certificates-grid">
+      <div class="certificate-card">
+        <h3>Web Design</h3>
+        <p>I love creating visually appealing and user-friendly website designs.</p>
+      </div>
+      <div class="certificate-card">
+        <h3>Technology & Innovation</h3>
+        <p>Passionate about learning new technologies and applying them to solve problems.</p>
+      </div>
+      <div class="certificate-card">
+        <h3>Teaching & Mentoring</h3>
+        <p>Enjoy sharing knowledge and helping others grow through teaching.</p>
+      </div>
+      <div class="certificate-card">
+        <h3>Digital Marketing Trends</h3>
+        <p>Interested in modern marketing strategies and online growth techniques.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Career Goals Section -->
+  <section class="page-section">
+    <h2>My Career Goals</h2>
+    <p class="goal-text">
+      My goal is to work in a dynamic organization where I can apply my technical expertise,
+      continue learning, and contribute to innovative projects. I aim to grow as a professional
+      and make a meaningful impact through technology.
+    </p>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="page-section">
+    <h2>Let's Work Together</h2>
+    <p>Interested in collaborating or learning more about me? Feel free to reach out or download my CV.</p>
+    <a href="contact.html" class="btn">Contact Me</a>
+    <a href="#" onclick="generateCV()" class="btn">Download CV</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Esha Ishfaq. All rights reserved.</p>
+  </footer>
+
+  <!-- CV Generator Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    function generateCV() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+let y = 20; // Starting Y position
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text("Esha Ishfaq", 20, y);
+  y += 10;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const headline = "Bachelor of Science in Information Technology (BSIT) | Front-End Developer | Lead Generation & Data Management Specialist | Virtual Assistant";
+  doc.text(doc.splitTextToSize(headline, 170), 20, y);
+  y += 20;
+
+  // About Me
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("About Me:", 20, y);
+  y += 6;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const aboutMe = "Driven and passionate Information Technology graduate with a strong foundation in lead generation, data management, and teaching. Proficient in HTML, CSS, and Java, with expertise in building responsive, user-friendly front-end websites that combine functionality with modern, sleek design.\n\nHighly detail-oriented and organized, with excellent communication and time management skills. Eager to contribute to a dynamic team as a Data Entry Specialist, Virtual Assistant, or Front-End Developer, while continuously growing professionally and pushing the boundaries of innovation in the tech industry.";
+  const aboutLines = doc.splitTextToSize(aboutMe, 170);
+  aboutLines.forEach(line => {
+    if (y > 280) { // Approx page height limit
+      doc.addPage();
+      y = 20;
+    }
+    doc.text(line, 20, y);
+    y += 6;
+  });
+  y += 4;
+
+  // Skills
+  if (y > 260) { doc.addPage(); y = 20; }
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("Skills:", 20, y);
+  y += 6;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const skills = [
+    "- Front-End Development: HTML, CSS, Java",
+    "- Digital Marketing: Lead Generation, SEO, Social Media Strategy",
+    "- Professional Skills: Time Management, Adaptability, Teaching",
+    "- Soft Skills: Communication, Teamwork, Problem Solving"
+  ];
+  skills.forEach(skill => {
+    if (y > 280) { doc.addPage(); y = 20; }
+    doc.text(skill, 30, y);
+    y += 6;
+  });
+  y += 4;
+
+  // Interests
+  if (y > 260) { doc.addPage(); y = 20; }
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("Interests:", 20, y);
+  y += 6;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const interests = [
+    "- Web Design: Creating visually appealing and user-friendly website designs",
+    "- Technology & Innovation: Learning new technologies to solve problems",
+    "- Teaching & Mentoring: Sharing knowledge and helping others grow",
+    "- Digital Marketing Trends: Exploring modern marketing strategies and online growth techniques"
+  ];
+  interests.forEach(item => {
+    if (y > 280) { doc.addPage(); y = 20; }
+    doc.text(item, 30, y);
+    y += 6;
+  });
+  y += 4;
+
+  // Experience
+  if (y > 260) { doc.addPage(); y = 20; }
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("Experience:", 20, y);
+  y += 6;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const experience = [
+    "- Government Elementary School, Lodhran | EST-CS (March 2025 - August 2025)",
+    "- Govt. Girls Elementary School, Lodhran | Punjab Govt Internship Program",
+    "- Government Girls High School, Lodhran | Secondary School Teacher (Mathematics) (Aug 2023 - Nov 2024) Taught 9th and 10th grade students, improving their problem-solving skills",
+    "- Lead Generation & Data Entry Executive: Practiced lead generation using Lead Surface, managed client data and CRM systems while handling emails and records efficiently"
+  ];
+  experience.forEach(exp => {
+    if (y > 280) { doc.addPage(); y = 20; }
+    doc.text(exp, 30, y);
+    y += 6;
+  });
+  y += 4;
+
+  // Achievements & Certificates
+  if (y > 260) { doc.addPage(); y = 20; }
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("Achievements & Certificates:", 20, y);
+  y += 6;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const achievements = [
+    "- Artificial Intelligence for IT & Non-IT Professionals | Virtual University | Feb 15, 2021",
+    "- Freelancing | DigiSkills.pk (Virtual University, Ignite, Ministry of IT & Telecom) | May 18, 2021 | Batch 09",
+    "- Digital Marketing | DigiSkills.pk | May 18, 2021 | Batch 09",
+    "- The Fundamentals of Digital Marketing | Google Digital Unlocked | May 7, 2021",
+    "- Introduction to Cybersecurity | Cisco Networking Academy | May 18, 2021",
+    "- Introduction to Packet Tracer | Cisco Networking Academy | May 18, 2021"
+  ];
+  achievements.forEach(item => {
+    if (y > 280) { doc.addPage(); y = 20; }
+    doc.text(item, 30, y);
+    y += 6;
+  });
+  y += 4;
+
+  // Education
+  if (y > 260) { doc.addPage(); y = 20; }
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("Education:", 20, y);
+  y += 6;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const education = [
+    "- Bachelor of Science in Information Technology | BZU Multan | 2019 - 2023 | CGPA: 3.57 / 4.00",
+    "- Intermediate (Pre-Engineering) | Pins College Lodhran | 2017 - 2019 | Marks: 819 / 1100",
+    "- Matriculation (Science) | Pins School Lodhran | 2015 - 2017 | Marks: 924 / 1100"
+  ];
+  education.forEach(item => {
+    if (y > 280) { doc.addPage(); y = 20; }
+    doc.text(item, 30, y);
+    y += 6;
+  });
+  y += 4;
+
+  // Contact
+  if (y > 260) { doc.addPage(); y = 20; }
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("Contact:", 20, y);
+  y += 6;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const contact = [
+     "Email: eshaishfaq.it@gmail.com",
+    "LinkedIn:www.linkedin.com/in/esha-rana-045a91324"
+  ];
+  contact.forEach(item => {
+    if (y > 280) { doc.addPage(); y = 20; }
+    doc.text(item, 30, y);
+    y += 6;
+  });
+
+      doc.save("Esha_Ishfaq_CV.pdf");
+    }
+  </script>
+  <script src="script.js"></script>
+
+</body>
+</html>
