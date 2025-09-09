@@ -93,9 +93,8 @@
 
     <div class="contact-grid">
       
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=eshaishfaq.it@gmail.com" target="_blank">
-  📧 Email
-</a>
+      <a href="#" id="email-btn">📧 Email</a>
+
 
       <a href="https://www.linkedin.com/in/esha-rana-045a91324/" target="_blank">🔗 LinkedIn</a>
       
@@ -107,5 +106,31 @@
     <p>© 2025 Esha Ishfaq. All rights reserved.</p>
   </footer>
   <script src="script.js"></script>
+
+  <script>
+  document.getElementById('email-btn').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default link behavior
+
+    // Your email address
+    const email = "eshaishfaq.it@gmail.com";
+    
+    // Compose window link for Gmail
+    const gmailLink = `https://mail.google.com/mail/u/0/?view=cm&fs=1&tf=1&to=${email}`;
+    
+    // Mailto link for default apps
+    const mailtoLink = `mailto:${email}`;
+    
+    // Detect if the user is on mobile or desktop
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      // Mobile devices usually open mail apps by default
+      window.location.href = mailtoLink;
+    } else {
+      // Desktop: open Gmail in a new tab
+      window.open(gmailLink, '_blank');
+    }
+  });
+</script>
+
 </body>
 </html>
+
