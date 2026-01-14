@@ -45,85 +45,103 @@ function generateCV() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-
-  /* ===== BACKGROUND (SOFT COLOR, NOT WHITE) ===== */
-  doc.setFillColor(248, 249, 250); // light grey
-  doc.rect(0, 0, pageWidth, pageHeight, "F");
-
+  const W = doc.internal.pageSize.getWidth();
+  const H = doc.internal.pageSize.getHeight();
   let y = 20;
+
+  /* ===== BACKGROUND ===== */
+  doc.setFillColor(255, 255, 255);
+  doc.rect(0, 0, W, H, "F");
+
+  /* ===== RAINBOW STRIP ===== */
+  const rainbow = [
+    [255, 99, 132],
+    [255, 159, 64],
+    [255, 205, 86],
+    [75, 192, 192],
+    [54, 162, 235],
+    [153, 102, 255]
+  ];
+  let ry = 0;
+  rainbow.forEach(c => {
+    doc.setFillColor(...c);
+    doc.rect(0, ry, 12, H / rainbow.length, "F");
+    ry += H / rainbow.length;
+  });
 
   /* ===== NAME ===== */
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(20);
-  doc.setTextColor(33, 37, 41);
+  doc.setFontSize(22);
+  doc.setTextColor(33, 33, 33);
   doc.text("Esha Ishfaq", 20, y);
   y += 10;
 
   /* ===== HEADLINE ===== */
   doc.setFont("helvetica", "normal");
   doc.setFontSize(12);
-  const headline =
-    "BS Information Technology Graduate | Lead Generation & Data Entry Executive | Computer & IT Skills Professional";
-  doc.text(doc.splitTextToSize(headline, 170), 20, y);
-  y += 8;
+  doc.text(
+    doc.splitTextToSize(
+      "BS Information Technology Graduate | Lead Generation & Data Entry Executive | Computer & IT Skills Professional",
+      170
+    ),
+    20,
+    y
+  );
+  y += 10;
 
-  /* ===== CONTACT (MOVED TO TOP – SAME INFO) ===== */
+  /* ===== CONTACT (TOP) ===== */
   doc.setFontSize(11);
-  const contactTop = [
+  [
     "Phone: 0316-7457018",
     "Email: eshaishfaq01@gmail.com",
     "LinkedIn: www.linkedin.com/in/esha-rana-045a91324"
-  ];
-  contactTop.forEach(item => {
-    doc.text(item, 20, y);
+  ].forEach(c => {
+    doc.text(c, 20, y);
     y += 5;
+  });
+
+  y += 8;
+
+  /* ===== SECTION TITLE ===== */
+  let colorIndex = 0;
+  function section(title) {
+    doc.setFillColor(...rainbow[colorIndex % rainbow.length]);
+    doc.rect(18, y - 6, W - 36, 9, "F");
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(title, 22, y);
+    y += 10;
+
+    doc.setTextColor(0, 0, 0);
+    colorIndex++;
+  }
+
+  /* ===== SUMMARY (SAME TEXT AS YOUR CV) ===== */
+  section("Professional Summary");
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const summary =
+    "A dedicated and goal-oriented Information Technology graduate with strong computer and IT skills and effective communication abilities. Possesses hands-on experience in lead generation, online research, and accurate data handling using MS Office and digital tools.\n\nHighly organized, detail-oriented, and motivated to work in a well-reputed organization where skills can be utilized efficiently, professional growth can be achieved, and meaningful contributions can be made toward organizational success.";
+
+  doc.splitTextToSize(summary, 170).forEach(l => {
+    doc.text(l, 20, y);
+    y += 6;
   });
 
   y += 6;
 
-  /* ===== SECTION TITLE FUNCTION ===== */
-  function sectionTitle(title) {
-    doc.setDrawColor(52, 152, 219);
-    doc.setLineWidth(1.5);
-    doc.line(20, y, pageWidth - 20, y);
-    y += 6;
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text(title, 20, y);
-    y += 6;
-  }
-
-  /* ===== PROFESSIONAL SUMMARY ===== */
-  sectionTitle("Professional Summary");
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  const aboutMe =
-    "A dedicated and goal-oriented Information Technology graduate with strong computer and IT skills and effective communication abilities. Possesses hands-on experience in lead generation, online research, and accurate data handling using MS Office and digital tools.\n\nHighly organized, detail-oriented, and motivated to work in a well-reputed organization where skills can be utilized efficiently, professional growth can be achieved, and meaningful contributions can be made toward organizational success.";
-
-  doc.splitTextToSize(aboutMe, 170).forEach(line => {
-    if (y > 280) {
-      doc.addPage();
-      y = 20;
-    }
-    doc.text(line, 20, y);
-    y += 6;
-  });
-
-  y += 4;
-
   /* ===== SKILLS ===== */
-  sectionTitle("Skills");
+  section("Skills");
 
   doc.setFont("helvetica", "bold");
   doc.text("Computer & IT Skills", 20, y);
   y += 6;
 
   doc.setFont("helvetica", "normal");
-  const computerSkills = [
+  [
     "• MS Word (Document Formatting & Typing)",
     "• MS Excel (Data Entry, Basic Formulas)",
     "• MS PowerPoint (Presentations)",
@@ -131,20 +149,18 @@ function generateCV() {
     "• Internet & Email Handling",
     "• Digital Record Keeping",
     "• Basic IT Troubleshooting"
-  ];
-  computerSkills.forEach(item => {
-    doc.text(item, 25, y);
+  ].forEach(s => {
+    doc.text(s, 25, y);
     y += 6;
   });
 
   y += 4;
-
   doc.setFont("helvetica", "bold");
   doc.text("Communication & Soft Skills", 20, y);
   y += 6;
 
   doc.setFont("helvetica", "normal");
-  const softSkills = [
+  [
     "• Clear Verbal & Written Communication",
     "• Professional Email Writing",
     "• Teamwork & Coordination",
@@ -152,16 +168,15 @@ function generateCV() {
     "• Problem Solving",
     "• Adaptability & Willingness to Learn",
     "• Attention to Detail"
-  ];
-  softSkills.forEach(item => {
-    doc.text(item, 25, y);
+  ].forEach(s => {
+    doc.text(s, 25, y);
     y += 6;
   });
 
-  y += 4;
+  y += 6;
 
   /* ===== EXPERIENCE ===== */
-  sectionTitle("Experience");
+  section("Experience");
 
   doc.setFont("helvetica", "bold");
   doc.text("STI Teacher (EST – Computer Science)", 20, y);
@@ -190,29 +205,28 @@ function generateCV() {
     25,
     y
   );
-  y += 6;
+
+  y += 8;
 
   /* ===== CERTIFICATIONS ===== */
-  sectionTitle("Certifications");
+  section("Certifications");
 
-  doc.setFont("helvetica", "normal");
-  const achievements = [
+  [
     "• Artificial Intelligence for IT & Non-IT Professionals | Virtual University",
     "• Freelancing | DigiSkills.pk",
     "• Digital Marketing | DigiSkills.pk",
     "• Fundamentals of Digital Marketing | Google Digital Unlocked",
     "• Introduction to Cybersecurity | Cisco Networking Academy",
     "• Introduction to Packet Tracer | Cisco Networking Academy"
-  ];
-  achievements.forEach(item => {
-    doc.text(item, 25, y);
+  ].forEach(c => {
+    doc.text(c, 25, y);
     y += 6;
   });
 
-  y += 4;
+  y += 6;
 
   /* ===== EDUCATION ===== */
-  sectionTitle("Education");
+  section("Education");
 
   doc.setFont("helvetica", "bold");
   doc.text("Bachelor of Science in Information Technology (BSIT)", 20, y);
@@ -235,13 +249,14 @@ function generateCV() {
   doc.text("Pins School Lodhran | 2015 – 2017 | Marks: 924 / 1100", 25, y);
 
   /* ===== SAVE ===== */
-  doc.save("Esha_Ishfaq_CV.pdf");
+  doc.save("Esha_Ishfaq_Rainbow_CV.pdf");
 }
 </script>
 <script src="script.js"></script>
 
 </body>
 </html>
+
 
 
 
