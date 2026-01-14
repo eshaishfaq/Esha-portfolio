@@ -141,7 +141,7 @@ function generateCV() {
   doc.setFontSize(12);
 
   const summary =
-    "A dedicated and goal-oriented Information Technology graduate with strong computer and IT skills and effective communication abilities. Possesses hands-on experience in lead generation, online research, and accurate data handling using MS Office and digital tools.\n\nHighly organized, detail-oriented, and motivated to work in a well-reputed organization where skills can be utilized efficiently, professional growth can be achieved, and meaningful contributions can be made toward organizational success.";
+    "A dedicated and goal-oriented Information Technology graduate with strong computer and IT skills and effective communication abilities. Possesses hands-on experience in lead generation, online research, and accurate data handling using MS Office and digital tools.Highly organized, detail-oriented, and motivated to work in a well-reputed organization where skills can be utilized efficiently, professional growth can be achieved, and meaningful contributions can be made toward organizational success.";
 
   doc.splitTextToSize(summary, 170).forEach(l => {
     checkPage(6);
@@ -203,7 +203,7 @@ function generateCV() {
   y += 6;
   doc.setFont("helvetica", "normal");
   doc.text(
-    "GGES, Jalal Abad, Lodhran |  March 2025 – Present",
+    "GGES, Jalal Abad, Lodhran | unjab Govt Internship Program \n\nMarch 2025 – Present",
     25,
     y
   );
@@ -269,6 +269,7 @@ function generateCV() {
   doc.setFont("helvetica", "normal");
   doc.text("Pins School Lodhran | 2015 – 2017 | Marks: 924 / 1100", 25, y);
 
+  y += 8;
   /* ===== REFERENCES ===== */
 section("References");
 checkPage(6);
