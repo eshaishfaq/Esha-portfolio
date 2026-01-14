@@ -49,11 +49,7 @@ function generateCV() {
   const H = doc.internal.pageSize.getHeight();
   let y = 20;
 
-  /* ===== BACKGROUND ===== */
-  doc.setFillColor(255, 255, 255);
-  doc.rect(0, 0, W, H, "F");
-
-  /* ===== RAINBOW STRIP ===== */
+  /* ===== RAINBOW COLORS ===== */
   const rainbow = [
     [255, 99, 132],
     [255, 159, 64],
@@ -62,12 +58,30 @@ function generateCV() {
     [54, 162, 235],
     [153, 102, 255]
   ];
-  let ry = 0;
-  rainbow.forEach(c => {
-    doc.setFillColor(...c);
-    doc.rect(0, ry, 12, H / rainbow.length, "F");
-    ry += H / rainbow.length;
-  });
+
+  /* ===== PAGE DECORATION ===== */
+  function drawPageDecor() {
+    doc.setFillColor(255, 255, 255);
+    doc.rect(0, 0, W, H, "F");
+
+    let ry = 0;
+    rainbow.forEach(c => {
+      doc.setFillColor(...c);
+      doc.rect(0, ry, 12, H / rainbow.length, "F");
+      ry += H / rainbow.length;
+    });
+  }
+
+  /* ===== PAGE CHECK ===== */
+  function checkPage(extra = 10) {
+    if (y + extra > H - 20) {
+      doc.addPage();
+      drawPageDecor();
+      y = 20;
+    }
+  }
+
+  drawPageDecor();
 
   /* ===== NAME ===== */
   doc.setFont("helvetica", "bold");
@@ -89,22 +103,25 @@ function generateCV() {
   );
   y += 10;
 
-  /* ===== CONTACT (TOP) ===== */
+  /* ===== CONTACT ===== */
   doc.setFontSize(11);
   [
     "Phone: 0316-7457018",
     "Email: eshaishfaq01@gmail.com",
     "LinkedIn: www.linkedin.com/in/esha-rana-045a91324"
   ].forEach(c => {
+    checkPage(6);
     doc.text(c, 20, y);
     y += 5;
   });
 
   y += 8;
 
-  /* ===== SECTION TITLE ===== */
+  /* ===== SECTION ===== */
   let colorIndex = 0;
   function section(title) {
+    checkPage(15);
+
     doc.setFillColor(...rainbow[colorIndex % rainbow.length]);
     doc.rect(18, y - 6, W - 36, 9, "F");
 
@@ -118,15 +135,16 @@ function generateCV() {
     colorIndex++;
   }
 
-  /* ===== SUMMARY (SAME TEXT AS YOUR CV) ===== */
+  /* ===== SUMMARY ===== */
   section("Professional Summary");
-
   doc.setFont("helvetica", "normal");
   doc.setFontSize(12);
+
   const summary =
     "A dedicated and goal-oriented Information Technology graduate with strong computer and IT skills and effective communication abilities. Possesses hands-on experience in lead generation, online research, and accurate data handling using MS Office and digital tools.\n\nHighly organized, detail-oriented, and motivated to work in a well-reputed organization where skills can be utilized efficiently, professional growth can be achieved, and meaningful contributions can be made toward organizational success.";
 
   doc.splitTextToSize(summary, 170).forEach(l => {
+    checkPage(6);
     doc.text(l, 20, y);
     y += 6;
   });
@@ -150,6 +168,7 @@ function generateCV() {
     "• Digital Record Keeping",
     "• Basic IT Troubleshooting"
   ].forEach(s => {
+    checkPage(6);
     doc.text(s, 25, y);
     y += 6;
   });
@@ -169,6 +188,7 @@ function generateCV() {
     "• Adaptability & Willingness to Learn",
     "• Attention to Detail"
   ].forEach(s => {
+    checkPage(6);
     doc.text(s, 25, y);
     y += 6;
   });
@@ -219,6 +239,7 @@ function generateCV() {
     "• Introduction to Cybersecurity | Cisco Networking Academy",
     "• Introduction to Packet Tracer | Cisco Networking Academy"
   ].forEach(c => {
+    checkPage(6);
     doc.text(c, 25, y);
     y += 6;
   });
@@ -256,6 +277,7 @@ function generateCV() {
 
 </body>
 </html>
+
 
 
 
