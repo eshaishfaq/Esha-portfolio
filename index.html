@@ -203,7 +203,7 @@ function generateCV() {
   y += 6;
   doc.setFont("helvetica", "normal");
   doc.text(
-    "GGES, Jalal Abad, Lodhran | Punjab Govt Internship Program, March 2025 – Present",
+    "GGES, Jalal Abad, Lodhran |  March 2025 – Present",
     25,
     y
   );
@@ -221,7 +221,7 @@ function generateCV() {
   y += 6;
   doc.setFont("helvetica", "normal");
   doc.text(
-    "Lead Surface, Lodhran | 2022 – 2024 | Online lead research and record management",
+    "Lead Surface, Lodhran | 2022 – 2024 ",
     25,
     y
   );
@@ -269,14 +269,30 @@ function generateCV() {
   doc.setFont("helvetica", "normal");
   doc.text("Pins School Lodhran | 2015 – 2017 | Marks: 924 / 1100", 25, y);
 
+  /* ===== REFERENCES ===== */
+section("References");
+checkPage(6);
+doc.setFont("helvetica", "normal");
+doc.setFontSize(12);
+doc.text("References available upon request.", 25, y);
+y += 8;
+
+/* ===== END LINE ===== */
+checkPage(4);
+doc.setDrawColor(150); // gray line
+doc.setLineWidth(0.5);
+doc.line(20, y, W - 20, y); // horizontal line from left to right margin
+y += 4;
+
   /* ===== SAVE ===== */
-  doc.save("Esha_Ishfaq_Rainbow_CV.pdf");
+  doc.save("Esha_Ishfaq_CV.pdf");
 }
 </script>
 <script src="script.js"></script>
 
 </body>
 </html>
+
 
 
 
