@@ -45,162 +45,154 @@ function generateCV() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  const pageWidth = doc.internal.pageSize.getWidth();
+  const w = doc.internal.pageSize.getWidth();
+  const h = doc.internal.pageSize.getHeight();
   let y = 20;
 
-  /* ===== COLORS ===== */
-  const primary = [41, 128, 185];   // Blue
-  const lightGray = [245, 247, 250];
+  /* ===== BACKGROUND ===== */
+  doc.setFillColor(252, 248, 243);
+  doc.rect(0, 0, w, h, "F");
 
-  /* ===== HEADER BACKGROUND ===== */
-  doc.setFillColor(...primary);
-  doc.rect(0, 0, pageWidth, 35, "F");
+  /* ===== LEFT RAINBOW STRIP ===== */
+  const rainbow = [
+    [231, 76, 60],
+    [241, 196, 15],
+    [46, 204, 113],
+    [52, 152, 219],
+    [155, 89, 182]
+  ];
+
+  let sy = 0;
+  rainbow.forEach(c => {
+    doc.setFillColor(...c);
+    doc.rect(0, sy, 10, h / rainbow.length, "F");
+    sy += h / rainbow.length;
+  });
 
   /* ===== NAME ===== */
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(20);
-  doc.setTextColor(255, 255, 255);
-  doc.text("Esha Ishfaq", 20, 22);
+  doc.setFontSize(22);
+  doc.setTextColor(44, 62, 80);
+  doc.text("Esha Ishfaq", 20, y);
+  y += 8;
 
+  /* ===== HEADLINE ===== */
+  doc.setFont("helvetica", "normal");
   doc.setFontSize(11);
   doc.text(
     "BS Information Technology Graduate | IT & Computer Skills Professional",
     20,
-    30
+    y
   );
+  y += 7;
 
-  y = 45;
-  doc.setTextColor(0, 0, 0);
+  /* ===== CONTACT (TOP) ===== */
+  doc.setFontSize(10);
+  [
+    "Phone: 0316-7457018",
+    "Email: eshaishfaq01@gmail.com",
+    "LinkedIn: linkedin.com/in/esha-rana-045a91324"
+  ].forEach(c => {
+    doc.text(c, 20, y);
+    y += 5;
+  });
 
-  /* ===== SECTION TITLE FUNCTION ===== */
-  function sectionTitle(title) {
-    doc.setFillColor(...lightGray);
-    doc.rect(15, y - 6, pageWidth - 30, 10, "F");
+  y += 6;
+
+  /* ===== SECTION FUNCTION ===== */
+  let colorIndex = 0;
+  function section(title) {
+    doc.setDrawColor(...rainbow[colorIndex % rainbow.length]);
+    doc.setLineWidth(2);
+    doc.line(20, y, w - 20, y);
+
+    y += 5;
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
+    doc.setFontSize(14);
     doc.text(title, 20, y);
-    y += 10;
+    y += 8;
+    colorIndex++;
   }
 
-  /* ===== PROFESSIONAL SUMMARY ===== */
-  sectionTitle("Professional Summary");
+  /* ===== SUMMARY ===== */
+  section("Professional Summary");
   doc.setFont("helvetica", "normal");
   doc.setFontSize(11);
-
-  const summary =
-    "A dedicated and goal-oriented BS Information Technology graduate with strong computer and IT skills. Experienced in lead generation, online research, data entry, and record management using MS Office and digital tools. Highly organized, detail-oriented, and motivated to contribute effectively in a professional organization.";
-
-  doc.splitTextToSize(summary, pageWidth - 40).forEach(line => {
-    doc.text(line, 20, y);
+  doc.splitTextToSize(
+    "A dedicated BS Information Technology graduate with strong computer and IT skills. Experienced in data entry, lead generation, and digital record keeping. Highly organized, detail-oriented, and motivated to work in a professional environment.",
+    w - 40
+  ).forEach(l => {
+    doc.text(l, 20, y);
     y += 6;
   });
 
   y += 6;
 
   /* ===== SKILLS ===== */
-  sectionTitle("Skills");
-
-  doc.setFont("helvetica", "bold");
-  doc.text("Computer & IT Skills", 20, y);
-  y += 6;
-
-  doc.setFont("helvetica", "normal");
+  section("Skills");
   [
     "• MS Word, Excel & PowerPoint",
     "• Data Entry & Digital Record Keeping",
     "• Internet & Email Handling",
     "• AI-Assisted Productivity Tools",
-    "• Basic IT Troubleshooting"
+    "• Basic IT Troubleshooting",
+    "• Communication & Time Management"
   ].forEach(s => {
     doc.text(s, 25, y);
-    y += 5;
-  });
-
-  y += 4;
-  doc.setFont("helvetica", "bold");
-  doc.text("Communication & Soft Skills", 20, y);
-  y += 6;
-
-  doc.setFont("helvetica", "normal");
-  [
-    "• Clear Communication & Email Writing",
-    "• Time Management & Teamwork",
-    "• Problem Solving",
-    "• Adaptability & Attention to Detail"
-  ].forEach(s => {
-    doc.text(s, 25, y);
-    y += 5;
+    y += 6;
   });
 
   y += 6;
 
-  /* ===== EXPERIENCE ===== */
-  sectionTitle("Experience");
+/* ===== EXPERIENCE ===== */
+section("Experience");
 
-  doc.setFont("helvetica", "bold");
-  doc.text("STI Teacher (EST – Computer Science)", 20, y);
-  y += 5;
-  doc.setFont("helvetica", "normal");
-  doc.text(
-    "GGES Jalal Abad, Lodhran | Punjab Govt Internship Program | Mar 2025 – Present",
-    25,
-    y
-  );
-  y += 7;
+doc.setFont("helvetica", "bold");
+doc.text("STI Teacher (EST – Computer Science)", 20, y);
+y += 5;
+doc.setFont("helvetica", "normal");
+doc.text("GGES Jalal Abad, Lodhran | Mar 2025 – Present", 25, y);
+y += 7;
 
-  doc.setFont("helvetica", "bold");
-  doc.text("Secondary School Teacher (Mathematics)", 20, y);
-  y += 5;
-  doc.setFont("helvetica", "normal");
-  doc.text("Govt. Girls High School, Lodhran | Aug 2023 – Nov 2024", 25, y);
-  y += 7;
+doc.setFont("helvetica", "bold");
+doc.text("Secondary School Teacher (Mathematics)", 20, y);
+y += 5;
+doc.setFont("helvetica", "normal");
+doc.text("Govt. Girls High School, Lodhran | Aug 2023 – Nov 2024", 25, y);
+y += 7;
 
-  doc.setFont("helvetica", "bold");
-  doc.text("Lead Generation & Data Entry Executive", 20, y);
-  y += 5;
-  doc.setFont("helvetica", "normal");
-  doc.text("Lead Surface, Lodhran | 2022 – 2024", 25, y);
-  y += 6;
+/* 👉 Lead Generation Experience (RESTORED) */
+doc.setFont("helvetica", "bold");
+doc.text("Lead Generation & Data Entry Executive", 20, y);
+y += 5;
+doc.setFont("helvetica", "normal");
+doc.text(
+  "Lead Surface, Lodhran | 2022 – 2024 | Online research, LinkedIn lead search & data entry",
+  25,
+  y
+);
+y += 7;
+
 
   /* ===== EDUCATION ===== */
-  sectionTitle("Education");
+  section("Education");
 
   doc.setFont("helvetica", "bold");
   doc.text("BS Information Technology", 20, y);
   y += 5;
   doc.setFont("helvetica", "normal");
-  doc.text("BZU Multan | 2019 – 2023 | CGPA: 3.57 / 4.00", 25, y);
+  doc.text("BZU Multan | CGPA 3.57 / 4.00", 25, y);
   y += 6;
-
-  doc.setFont("helvetica", "bold");
-  doc.text("Intermediate (Pre-Engineering)", 20, y);
-  y += 5;
-  doc.setFont("helvetica", "normal");
-  doc.text("Pins College Lodhran | 2017 – 2019", 25, y);
-  y += 6;
-
-  /* ===== CONTACT ===== */
-  sectionTitle("Contact");
-
-  doc.setFont("helvetica", "normal");
-  [
-    "📞 0316-7457018",
-    "✉️ eshaishfaq01@gmail.com",
-    "🔗 linkedin.com/in/esha-rana-045a91324"
-  ].forEach(c => {
-    doc.text(c, 25, y);
-    y += 6;
-  });
 
   /* ===== SAVE ===== */
-  doc.save("Esha_Ishfaq_Professional_CV.pdf");
+  doc.save("Esha_Ishfaq_CV.pdf");
 }
 </script>
- 
 <script src="script.js"></script>
 
 </body>
 </html>
+
 
 
 
