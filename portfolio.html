@@ -103,59 +103,128 @@
 
   <!-- CV Generator Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
- <script>
+
+<script>
 function generateCV() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
+  const W = doc.internal.pageSize.getWidth();
+  const H = doc.internal.pageSize.getHeight();
   let y = 20;
+
+  /* ===== RAINBOW COLORS ===== */
+  const rainbow = [
+    [255, 99, 132],
+    [255, 159, 64],
+    [255, 205, 86],
+    [75, 192, 192],
+    [54, 162, 235],
+    [153, 102, 255]
+  ];
+
+  /* ===== PAGE DECORATION ===== */
+  function drawPageDecor() {
+    doc.setFillColor(255, 255, 255);
+    doc.rect(0, 0, W, H, "F");
+
+    let ry = 0;
+    rainbow.forEach(c => {
+      doc.setFillColor(...c);
+      doc.rect(0, ry, 12, H / rainbow.length, "F");
+      ry += H / rainbow.length;
+    });
+  }
+
+  /* ===== PAGE CHECK ===== */
+  function checkPage(extra = 10) {
+    if (y + extra > H - 20) {
+      doc.addPage();
+      drawPageDecor();
+      y = 20;
+    }
+  }
+
+  drawPageDecor();
 
   /* ===== NAME ===== */
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
+  doc.setFontSize(22);
+  doc.setTextColor(33, 33, 33);
   doc.text("Esha Ishfaq", 20, y);
   y += 10;
 
   /* ===== HEADLINE ===== */
   doc.setFont("helvetica", "normal");
   doc.setFontSize(12);
-  const headline = "BS Information Technology Graduate | Lead Generation & Data Entry Executive | Computer & IT Skills Professional";
-  doc.text(doc.splitTextToSize(headline, 170), 20, y);
-  y += 15;
+  doc.text(
+    doc.splitTextToSize(
+      "Information Technology Graduate | Computer & IT Skills Professional
+",
+      170
+    ),
+    20,
+    y
+  );
+  y += 10;
 
-  /* ===== ABOUT ME ===== */
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("Professional Summary", 20, y);
-  y += 6;
+  /* ===== CONTACT ===== */
+  doc.setFontSize(11);
+  [
+    "Phone: 0316-7457018",
+    "Email: eshaishfaq01@gmail.com",
+    "LinkedIn: www.linkedin.com/in/esha-rana-045a91324"
+  ].forEach(c => {
+    checkPage(6);
+    doc.text(c, 20, y);
+    y += 5;
+  });
 
+  y += 8;
+
+  /* ===== SECTION ===== */
+  let colorIndex = 0;
+  function section(title) {
+    checkPage(15);
+
+    doc.setFillColor(...rainbow[colorIndex % rainbow.length]);
+    doc.rect(18, y - 6, W - 36, 9, "F");
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(title, 22, y);
+    y += 10;
+
+    doc.setTextColor(0, 0, 0);
+    colorIndex++;
+  }
+
+  /* ===== SUMMARY ===== */
+  section("Professional Summary");
   doc.setFont("helvetica", "normal");
   doc.setFontSize(12);
-  const aboutMe =
-    "A dedicated and goal-oriented Information Technology graduate with strong computer and IT skills and effective communication abilities. Possesses hands-on experience in lead generation, online research, and accurate data handling using MS Office and digital tools.\n\nHighly organized, detail-oriented, and motivated to work in a well-reputed organization where skills can be utilized efficiently, professional growth can be achieved, and meaningful contributions can be made toward organizational success.";
-  const aboutLines = doc.splitTextToSize(aboutMe, 170);
-  aboutLines.forEach(line => {
-    if (y > 280) { doc.addPage(); y = 20; }
-    doc.text(line, 20, y);
+
+  const summary =
+    "A dedicated and goal-oriented Information Technology graduate with strong computer and IT skills and effective communication abilities. Possesses hands-on experience in lead generation, online research, and accurate data handling using MS Office and digital tools.Highly organized, detail-oriented, and motivated to work in a well-reputed organization where skills can be utilized efficiently, professional growth can be achieved, and meaningful contributions can be made toward organizational success.";
+
+  doc.splitTextToSize(summary, 170).forEach(l => {
+    checkPage(6);
+    doc.text(l, 20, y);
     y += 6;
   });
+
   y += 6;
 
   /* ===== SKILLS ===== */
-  if (y > 260) { doc.addPage(); y = 20; }
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("Skills", 20, y);
-  y += 8;
-
-  doc.setFontSize(12);
+  section("Skills");
 
   doc.setFont("helvetica", "bold");
   doc.text("Computer & IT Skills", 20, y);
   y += 6;
 
   doc.setFont("helvetica", "normal");
-  const computerSkills = [
+  [
     "• MS Word (Document Formatting & Typing)",
     "• MS Excel (Data Entry, Basic Formulas)",
     "• MS PowerPoint (Presentations)",
@@ -163,20 +232,19 @@ function generateCV() {
     "• Internet & Email Handling",
     "• Digital Record Keeping",
     "• Basic IT Troubleshooting"
-  ];
-  computerSkills.forEach(item => {
-    doc.text(item, 25, y);
+  ].forEach(s => {
+    checkPage(6);
+    doc.text(s, 25, y);
     y += 6;
   });
 
   y += 4;
-
   doc.setFont("helvetica", "bold");
   doc.text("Communication & Soft Skills", 20, y);
   y += 6;
 
   doc.setFont("helvetica", "normal");
-  const softSkills = [
+  [
     "• Clear Verbal & Written Communication",
     "• Professional Email Writing",
     "• Teamwork & Coordination",
@@ -184,31 +252,27 @@ function generateCV() {
     "• Problem Solving",
     "• Adaptability & Willingness to Learn",
     "• Attention to Detail"
-  ];
-  softSkills.forEach(item => {
-    doc.text(item, 25, y);
+  ].forEach(s => {
+    checkPage(6);
+    doc.text(s, 25, y);
     y += 6;
   });
 
   y += 6;
 
   /* ===== EXPERIENCE ===== */
-  if (y > 260) { doc.addPage(); y = 20; }
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("Experience", 20, y);
-  y += 8;
-
-  doc.setFontSize(12);
+  section("Experience");
 
   doc.setFont("helvetica", "bold");
   doc.text("STI Teacher (EST – Computer Science)", 20, y);
   y += 6;
   doc.setFont("helvetica", "normal");
- doc.text("GGES, Jalal Abad, Lodhran | Punjab Govt Internship Program ,March 2025 – Present", 25, y);
-y += 8;
-
-
+  doc.text(
+    "GGES, Jalal Abad, Lodhran | March 2025 – Present",
+    25,
+    y
+  );
+  y += 8;
 
   doc.setFont("helvetica", "bold");
   doc.text("Secondary School Teacher (Mathematics)", 20, y);
@@ -221,38 +285,34 @@ y += 8;
   doc.text("Lead Generation & Data Entry Executive", 20, y);
   y += 6;
   doc.setFont("helvetica", "normal");
-  doc.text("Lead Surface, Lodhran | 2022 – 2024 | Online lead research and record management", 25, y);
-  y += 6;
+  doc.text(
+    "Lead Surface, Lodhran | 2022 – 2024 ",
+    25,
+    y
+  );
 
-  /* ===== CERTIFICATIONS ===== */
-  if (y > 260) { doc.addPage(); y = 20; }
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("Certifications", 20, y);
   y += 8;
 
-  doc.setFont("helvetica", "normal");
-  const achievements = [
+  /* ===== CERTIFICATIONS ===== */
+  section("Certifications");
+
+  [
     "• Artificial Intelligence for IT & Non-IT Professionals | Virtual University",
     "• Freelancing | DigiSkills.pk",
     "• Digital Marketing | DigiSkills.pk",
     "• Fundamentals of Digital Marketing | Google Digital Unlocked",
     "• Introduction to Cybersecurity | Cisco Networking Academy",
     "• Introduction to Packet Tracer | Cisco Networking Academy"
-  ];
-  achievements.forEach(item => {
-    doc.text(item, 25, y);
+  ].forEach(c => {
+    checkPage(6);
+    doc.text(c, 25, y);
     y += 6;
   });
 
   y += 6;
 
   /* ===== EDUCATION ===== */
-  if (y > 260) { doc.addPage(); y = 20; }
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("Education", 20, y);
-  y += 8;
+  section("Education");
 
   doc.setFont("helvetica", "bold");
   doc.text("Bachelor of Science in Information Technology (BSIT)", 20, y);
@@ -273,26 +333,22 @@ y += 8;
   y += 6;
   doc.setFont("helvetica", "normal");
   doc.text("Pins School Lodhran | 2015 – 2017 | Marks: 924 / 1100", 25, y);
-  y += 6;
 
-  /* ===== CONTACT ===== */
-  if (y > 260) { doc.addPage(); y = 20; }
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.text("Contact", 20, y);
   y += 8;
+  /* ===== REFERENCES ===== */
+section("References");
+checkPage(6);
+doc.setFont("helvetica", "normal");
+doc.setFontSize(12);
+doc.text("References available upon request.", 25, y);
+y += 8;
 
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  const contact = [
-    "Phone: 0316-7457018",
-    "Email: eshaishfaq01@gmail.com",
-    "LinkedIn: www.linkedin.com/in/esha-rana-045a91324"
-  ];
-  contact.forEach(item => {
-    doc.text(item, 25, y);
-    y += 6;
-  });
+/* ===== END LINE ===== */
+checkPage(4);
+doc.setDrawColor(150); // gray line
+doc.setLineWidth(0.5);
+doc.line(20, y, W - 20, y); // horizontal line from left to right margin
+y += 4;
 
   /* ===== SAVE ===== */
   doc.save("Esha_Ishfaq_CV.pdf");
@@ -302,6 +358,7 @@ y += 8;
 
 </body>
 </html>
+
 
 
 
